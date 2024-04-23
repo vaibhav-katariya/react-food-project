@@ -6,7 +6,7 @@ const initialState = {
   cartItem: JSON.parse(localStorage.getItem("cartItem")) || [],
   qty: JSON.parse(localStorage.getItem("quantity")) || 0,
   price: 0,
-  totalPrice: 0,
+  totalPrice: JSON.parse(localStorage.getItem("totalPrice")) || 0,
 };
 
 const cartSlice = createSlice({
@@ -35,12 +35,13 @@ const cartSlice = createSlice({
         existingItem.totalPrice =
           Number(newItem.price) + Number(existingItem.totalPrice);
       }
-
       localStorage.setItem("cartItem", JSON.stringify(state.cartItem));
       localStorage.setItem("quantity", JSON.stringify(state.qty));
-    },
-    removeCart: (state) => {
-      state.cartItem = [];
+      state.totalPrice = state.cartItem.reduce((total, item) => {
+        return total + item.totalPrice;
+      }, 0);
+      localStorage.setItem("totalPrice", JSON.stringify(state.totalPrice));
+      // console.log(state.totalPrice);
     },
     deleteItem: (state, action) => {
       const id = action.payload;
@@ -51,6 +52,11 @@ const cartSlice = createSlice({
       }
       localStorage.setItem("cartItem", JSON.stringify(state.cartItem));
       localStorage.setItem("quantity", JSON.stringify(state.qty));
+      state.totalPrice = state.cartItem.reduce((total, item) => {
+        return total + item.totalPrice;
+      }, 0);
+      localStorage.setItem("totalPrice", JSON.stringify(state.totalPrice));
+      // console.log(state.totalPrice);
     },
     increase: (state, { payload }) => {
       const cartItem = state.cartItem.find((item) => item.id === payload);
@@ -59,6 +65,11 @@ const cartSlice = createSlice({
         cartItem.totalPrice = cartItem.price * cartItem.quantity;
         localStorage.setItem("cartItem", JSON.stringify(state.cartItem));
         localStorage.setItem("quantity", JSON.stringify(state.qty));
+        state.totalPrice = state.cartItem.reduce((total, item) => {
+          return total + item.totalPrice;
+        }, 0);
+        localStorage.setItem("totalPrice", JSON.stringify(state.totalPrice));
+        // console.log(state.totalPrice);
       }
     },
     decrease: (state, { payload }) => {
@@ -68,11 +79,15 @@ const cartSlice = createSlice({
         cartItem.totalPrice = cartItem.price * cartItem.quantity;
         localStorage.setItem("cartItem", JSON.stringify(state.cartItem));
         localStorage.setItem("quantity", JSON.stringify(state.qty));
+        state.totalPrice = state.cartItem.reduce((total, item) => {
+          return total + item.totalPrice;
+        }, 0);
+        localStorage.setItem("totalPrice", JSON.stringify(state.totalPrice));
+        // console.log(state.totalPrice);
       }
     },
   },
 });
-
 export const { addToCart, removeCart, deleteItem, increase, decrease } =
   cartSlice.actions;
 export default cartSlice;
