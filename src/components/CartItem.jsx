@@ -2,7 +2,7 @@ import React from "react";
 import { FiPlusCircle } from "react-icons/fi";
 import { FiMinusCircle } from "react-icons/fi";
 import { useDispatch } from "react-redux";
-import { increase, decrease, removeCart, deleteItem } from "../store/CartSlice";
+import { increase, decrease, deleteItem } from "../store/CartSlice";
 import Button from "./Button";
 import { MdDeleteOutline } from "react-icons/md";
 const CartItem = ({ id, title, image01, quantity, totalPrice }) => {
